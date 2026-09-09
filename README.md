@@ -9,3 +9,7 @@ Run `v9-menu-migration.sql` once in Supabase SQL Editor after deploying the webs
 
 Customer menu URL:
 https://editorgaadu-cloud.github.io/chill-out-cafe/
+
+
+## Backend
+Live Supabase Edge Function: `manage-staff-v2` V15 (JWT verification enabled). The source is included in `manage-staff-v2/index.ts`.
