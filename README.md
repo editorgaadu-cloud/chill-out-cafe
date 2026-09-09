@@ -16,3 +16,11 @@ Free static cafe website connected to Supabase.
 
 ## Deployment
 Upload the project files to any free static host. Keep `config.js` with the Supabase publishable key only. Never put a Supabase secret/service-role key in frontend files.
+
+
+## V7 additions
+- Menu items support original price and offer/selling price.
+- Customers see the original price crossed out when the offer price is lower.
+- Owner can add a menu photo from the phone; the browser compresses it before saving.
+- Instagram link is shown to customers and can be changed in Owner > Settings.
+- Run `v7-migration.sql` once in the Supabase SQL Editor before using the new price fields.

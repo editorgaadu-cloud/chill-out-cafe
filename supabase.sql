@@ -32,3 +32,12 @@ create policy "owner delete orders" on public.orders for delete using(public.is_
 -- Never expose a Supabase service_role/secret key in the frontend.
 
 -- The current app stores the owner-managed phone book in site_settings.phone and QR state + review URL in site_settings.google_review_url using private metadata prefixes. This keeps the existing schema compatible. A future clean migration may split these into dedicated columns/tables.
+
+
+-- V7 migration: menu original/offer prices + Instagram + menu photo support.
+alter table public.menu_items add column if not exists original_price numeric(10,2) check(original_price is null or original_price>=0);
+alter table public.menu_items add column if not exists offer_price numeric(10,2) check(offer_price is null or offer_price>=0);
+update public.menu_items set original_price=coalesce(original_price,price), offer_price=coalesce(offer_price,price) where original_price is null or offer_price is null;
+alter table public.site_settings add column if not exists instagram_url text not null default 'https://www.instagram.com/chill0ut_gannavram?stkn=cWtwdDl1azV5ZDR5';
+update public.site_settings set instagram_url='https://www.instagram.com/chill0ut_gannavram?stkn=cWtwdDl1azV5ZDR5' where id=1;
+-- Menu photos are compressed in the browser and stored in menu_items.image_url, so no Storage bucket is required.
