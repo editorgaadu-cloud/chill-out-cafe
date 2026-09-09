@@ -1,4 +1,6 @@
-# Chill Out Cafe — V3
+Chill Out Cafe V8 — public loyalty/rewards sections removed. Owner/staff controls and all other V7 features remain.
+
+# Chill Out Cafe — V8
 
 Free static cafe website connected to Supabase.
 
