@@ -2,3 +2,13 @@
 
 .phoneList{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}.callBtn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;background:#eef8df;color:#124c2a;text-decoration:none;font-weight:700}.callBtn:hover{filter:brightness(.97)}.toggle{display:flex;align-items:center;gap:10px;padding:12px 0}.toggle input{width:auto}.phoneRow{margin:8px 0}.security{font-size:.88rem;opacity:.8}.ownerBox{margin:18px 0;padding:14px;border:1px dashed rgba(0,0,0,.18);border-radius:14px;background:#f7fbf2}.ownerBox p{margin:.5rem 0 0;font-size:.88rem;opacity:.8}
 .online{font-weight:700}.offline{font-weight:700}.phoneList{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.callBtn{display:inline-block;padding:10px 14px;border-radius:999px;border:1px solid #2f5d3a;text-decoration:none;color:inherit;background:rgba(255,255,255,.72)}.toggleLine{display:flex;align-items:center;gap:10px;font-weight:700}.toggleLine input{width:auto}
+
+/* Full-screen Owner Dashboard for easier phone use */
+#ownerModal{width:100vw;max-width:100vw;height:100vh;max-height:100vh;margin:0;padding:0;border-radius:0;overflow:hidden}
+#ownerModal .dashboard{width:100%;max-width:none;height:100%;max-height:none;min-height:100vh;border-radius:0;padding:24px clamp(16px,3vw,42px);overflow:auto}
+#ownerModal .dashHead{position:sticky;top:0;z-index:5;background:var(--bg);padding:4px 0 14px;border-bottom:1px solid var(--line)}
+#ownerModal .tabs{position:sticky;top:69px;z-index:4;background:var(--bg);padding:13px 0}
+#ownerModal #ownerContent{padding-bottom:40px}
+@media(max-width:560px){#ownerModal .dashboard{padding:18px 12px}#ownerModal .dashHead{top:0}#ownerModal .tabs{top:65px}.kpi b{font-size:21px}.adminRow,.orderRow{align-items:flex-start;flex-wrap:wrap}}
+
+.remember{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--mut);margin:4px 0 8px}.remember input{width:auto!important;margin:0!important}.staffAdd{display:grid;grid-template-columns:1fr 150px auto;gap:8px;margin:12px 0}.customerCard{display:grid;grid-template-columns:1fr 180px;gap:15px;padding:15px 0;border-bottom:1px solid var(--line)}@media(max-width:560px){.staffAdd{grid-template-columns:1fr}.customerCard{grid-template-columns:1fr}}
