@@ -1,15 +1,11 @@
-# Chill Out Cafe — V9
+# manage-staff-v2 — V15
 
-This package adds the uploaded FROUNT PG menu as editable menu items and keeps the V8 no-loyalty customer-facing website.
+This is the V15 Edge Function source deployed to the live Supabase project.
 
-## Owner menu controls
-The owner has full menu rights: add, edit, enable/disable, delete, change item name/category/description, upload/change photo, and edit original and selling/offer prices.
+- Owner Dashboard list/list-customers access: Primary Owner OR Owner role
+- Customer/Worker access: blocked
+- Primary Owner only: add/remove owners and workers
+- Sagar and Yamini are automatically ensured as Owners when the Owners & Workers list loads
+- JWT verification: enabled
 
-Run `v9-menu-migration.sql` once in Supabase SQL Editor after deploying the website files.
-
-Customer menu URL:
-https://editorgaadu-cloud.github.io/chill-out-cafe/
-
-
-## Backend
-Live Supabase Edge Function: `manage-staff-v2` V15 (JWT verification enabled). The source is included in `manage-staff-v2/index.ts`.
+Deploy this function only if you intentionally need to redeploy the backend. The live project already has V15 active.
