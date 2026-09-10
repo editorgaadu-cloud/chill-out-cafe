@@ -1,11 +1,7 @@
-# manage-staff-v2 — V15
+# Chill Out Cafe — Final
 
-This is the V15 Edge Function source deployed to the live Supabase project.
+Complete public/customer/worker/owner cafe system using the existing Supabase project.
 
-- Owner Dashboard list/list-customers access: Primary Owner OR Owner role
-- Customer/Worker access: blocked
-- Primary Owner only: add/remove owners and workers
-- Sagar and Yamini are automatically ensured as Owners when the Owners & Workers list loads
-- JWT verification: enabled
+Features: persistent sessions, guest access, customer signup/login/reset, worker counter ordering, QR ordering, phone ordering, printable bills, owner dashboard, menu management, offers, sales, phone numbers, staff/customer management, settings, Google review and Instagram.
 
-Deploy this function only if you intentionally need to redeploy the backend. The live project already has V15 active.
+No loyalty system is included.
