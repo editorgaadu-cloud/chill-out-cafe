@@ -119,4 +119,31 @@ async function customersAdmin(c){
   c.innerHTML=`<div class="panel"><div class="row"><div><h3>Customer Details</h3><p class="tiny">Registered customer information. Guest orders are shown in Orders but are not linked to a customer account.</p></div><button class="outline" id="refreshCustomers">Refresh</button></div><div class="customerTable">${customers.map(x=>{let m=map[x.id]||{count:0,total:0,last:null};return `<div class="customerCard"><div><b>${esc(x.full_name||'Customer')}</b><br><small>${esc(x.email||'No email')}</small><br><small>Phone: ${esc(x.phone||'Not provided')}</small></div><div><b>${m.count} orders</b><br><small>Spent ${money(m.total)}</small><br><small>Joined ${x.created_at?new Date(x.created_at).toLocaleDateString():'—'}</small></div></div>`}).join('')||'<p>No registered customers yet.</p>'}</div></div>`;$('refreshCustomers').onclick=()=>customersAdmin(c);
 }
 async function worker(){try{await staffCheck('worker');show('workerModal');loadWorker()}catch(x){toast(x.message)}}async function loadWorker(){let o=await getOrders();$('workerOrders').innerHTML=o.map(orderRow).join('')||'No orders.';await bindStatuses($('workerOrders'),loadWorker)}$('workerForm').onsubmit=async e=>{e.preventDefault();let row={customer_label:$('wCustomer').value,items:$('wItems').value,total:+$('wTotal').value,status:'noted',created_at:new Date().toISOString()};try{if(demo){let a=JSON.parse(localStorage.getItem('co_orders')||'[]');a.push({id:Date.now(),...row});localStorage.setItem('co_orders',JSON.stringify(a))}else{let r=await db.from('orders').insert({...row,created_by:user.id});if(r.error)throw r.error}e.target.reset();toast('Order saved');loadWorker()}catch(x){toast(x.message)}};$('refreshWorker').onclick=loadWorker;
-$('ownerLogout').onclick=async()=>{if(db)await db.auth.signOut();hide('ownerModal');role=null;user=null};if(!demo&&db)db.auth.onAuthStateChange(async(_event,session)=>{if(!session&&$('ownerModal')?.open){hide('ownerModal');role=null;user=null;toast('Owner session ended')}else if(session&&$('ownerModal')?.open){try{await staffCheck('owner')}catch(e){hide('ownerModal');role=null;user=null;toast('Owner access denied')}}});$('workerLogout').onclick=async()=>{if(db)await db.auth.signOut();hide('workerModal');role=null};pub();if(!demo)(async()=>{try{let s=await db.from('site_settings').select('*').eq('id',1).maybeSingle();if(s.data)settings={name:s.data.cafe_name,phone:s.data.phone,review:s.data.google_review_url,logo:s.data.logo_url,instagram:s.data.instagram_url||'https://www.instagram.com/chill0ut_gannavram?stkn=cWtwdDl1azV5ZDR5',qrOrderingEnabled:s.data.qr_ordering_enabled!==false};let pn=await db.from('phone_numbers').select('*').eq('enabled',true).order('id');if(pn.data)phoneNumbers=pn.data;let m=await db.from('menu_items').select('*').eq('is_available',true).order('name');if(m.data)menu=m.data.map(x=>({id:x.id,name:x.name,cat:x.category,desc:x.description,price:x.offer_price??x.price,original_price:x.original_price??x.price,offer_price:x.offer_price??x.price,image_url:x.image_url||'',active:true,icon:x.icon||'🍽️'}));let o=await db.from('offers').select('*').eq('is_active',true);if(o.data)offers=o.data.map(x=>({id:x.id,title:x.title,cat:x.category,desc:x.description,active:true}));let lc=await db.from('loyalty_cards').select('*').order('created_at');if(lc.data)loyaltyCards=lc.data.map(x=>({id:x.id,name:x.name,description:x.description,points_required:x.points_required,reward:x.reward,active:x.is_active}));pub()}catch(e){console.warn(e)}})()})();
+async function handleRecovery(){
+  if(demo||!db)return;
+  try{
+    const s=await db.auth.getSession();
+    if(!s.data?.session)return;
+    const p=new URLSearchParams(location.hash.replace(/^#/,'').replace(/^\?/,'&'));
+    const recovery=p.get('type')==='recovery';
+    if(!recovery)return;
+    const pw=prompt('Enter your new password (minimum 6 characters):');
+    if(pw===null)return;
+    if(pw.length<6)return toast('Password must be at least 6 characters. Open the reset email again to retry.');
+    const confirmPw=prompt('Enter the new password again:');
+    if(confirmPw!==pw)return toast('Passwords do not match. Open the reset email again to retry.');
+    const r=await db.auth.updateUser({password:pw});
+    if(r.error)throw r.error;
+    history.replaceState({},document.title,location.pathname+location.search);
+    toast('Password changed successfully. You can now sign in.');
+  }catch(e){toast(e.message||'Password reset failed')}
+}
+$('ownerLogout').onclick=async()=>{if(db)await db.auth.signOut();hide('ownerModal');role=null;user=null};
+if(!demo&&db)db.auth.onAuthStateChange(async(_event,session)=>{
+  if(_event==='PASSWORD_RECOVERY'){setTimeout(handleRecovery,50);return}
+  if(!session&&$('ownerModal')?.open){hide('ownerModal');role=null;user=null;toast('Owner session ended')}
+  else if(session&&$('ownerModal')?.open){try{await staffCheck('owner')}catch(e){hide('ownerModal');role=null;user=null;toast('Owner access denied')}}
+});
+$('workerLogout').onclick=async()=>{if(db)await db.auth.signOut();hide('workerModal');role=null};pub();if(!demo)(async()=>{try{let s=await db.from('site_settings').select('*').eq('id',1).maybeSingle();if(s.data)settings={name:s.data.cafe_name,phone:s.data.phone,review:s.data.google_review_url,logo:s.data.logo_url,instagram:s.data.instagram_url||'https://www.instagram.com/chill0ut_gannavram?stkn=cWtwdDl1azV5ZDR5',qrOrderingEnabled:s.data.qr_ordering_enabled!==false};let pn=await db.from('phone_numbers').select('*').eq('enabled',true).order('id');if(pn.data)phoneNumbers=pn.data;let m=await db.from('menu_items').select('*').eq('is_available',true).order('name');if(m.data)menu=m.data.map(x=>({id:x.id,name:x.name,cat:x.category,desc:x.description,price:x.offer_price??x.price,original_price:x.original_price??x.price,offer_price:x.offer_price??x.price,image_url:x.image_url||'',active:true,icon:x.icon||'🍽️'}));let o=await db.from('offers').select('*').eq('is_active',true);if(o.data)offers=o.data.map(x=>({id:x.id,title:x.title,cat:x.category,desc:x.description,active:true}));let lc=await db.from('loyalty_cards').select('*').order('created_at');if(lc.data)loyaltyCards=lc.data.map(x=>({id:x.id,name:x.name,description:x.description,points_required:x.points_required,reward:x.reward,active:x.is_active}));pub()}catch(e){console.warn(e)}})()})();
+
+if(!demo&&db){setTimeout(handleRecovery,300);}
