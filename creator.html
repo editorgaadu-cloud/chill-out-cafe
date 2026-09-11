@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>Creator Console</title>
+  <link rel="stylesheet" href="creator.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div id="app">
+    <section id="loginView" class="auth-shell">
+      <div class="auth-card">
+        <div class="mark">◆</div>
+        <p class="eyebrow">PLATFORM CREATOR</p>
+        <h1>Creator Console</h1>
+        <p class="muted">Secure platform-level access. Café owners use a separate login.</p>
+        <form id="loginForm">
+          <label>Email<input id="email" type="email" autocomplete="username" required></label>
+          <label>Password<input id="password" type="password" autocomplete="current-password" minlength="8" required></label>
+          <label class="check"><input id="remember" type="checkbox" checked> Keep me signed in</label>
+          <button class="primary" type="submit">Sign in</button>
+          <button class="link" id="forgot" type="button">Forgot password?</button>
+          <p id="loginMsg" class="message" role="alert"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="dashboardView" class="hidden">
+      <header class="topbar">
+        <div><strong>Creator Console</strong><span class="pill">PLATFORM</span></div>
+        <div class="top-actions"><span id="creatorEmail"></span><button id="logout" class="ghost">Sign out</button></div>
+      </header>
+      <main class="dashboard">
+        <div class="page-head">
+          <div><p class="eyebrow">UNIVERSAL PLATFORM</p><h1>All Cafés</h1><p class="muted">Verify and control registered cafés from one protected platform dashboard.</p></div>
+          <button id="refresh" class="secondary">Refresh</button>
+        </div>
+        <div id="stats" class="stats"></div>
+        <div class="toolbar"><input id="search" placeholder="Search café, email, phone or slug"><select id="statusFilter"><option value="all">All verification states</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select><select id="activeFilter"><option value="all">All activity</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+        <div id="tableWrap" class="table-wrap"><div class="loading">Loading cafés…</div></div>
+        <p id="dashMsg" class="message"></p>
+      </main>
+    </section>
+
+    <dialog id="verifyDialog">
+      <form method="dialog" class="dialog-card" id="verifyForm">
+        <button type="button" class="close" id="closeDialog">×</button>
+        <p class="eyebrow">CAFÉ VERIFICATION</p>
+        <h2 id="verifyName">Café</h2>
+        <p id="verifyDetails" class="muted"></p>
+        <label>Decision<select id="verifyStatus"><option value="approved">Approve</option><option value="rejected">Reject</option><option value="pending">Return to pending</option></select></label>
+        <div class="dialog-actions"><button type="button" class="secondary" id="cancelVerify">Cancel</button><button class="primary" type="submit">Save decision</button></div>
+        <p id="verifyMsg" class="message"></p>
+      </form>
+    </dialog>
+  </div>
+  <script src="config.js"></script>
+  <script src="creator.js"></script>
+</body>
+</html>
